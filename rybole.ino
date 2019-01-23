@@ -54,12 +54,12 @@ void loop() {
   currentTime = millis();
   if (currentTime - rememberedTime >= 100UL) { //delay 1 sec
     rememberedTime = currentTime;
-    // feed pause
+    // nacisniecie przycisku
     if ((digitalRead(button) == LOW) && (buttonDown == false)) {
       timeButtonDown = currentTime;
       buttonDown = true;
     }
-
+    // puszczenie przycisku
     if ((digitalRead(button) == HIGH) && (buttonDown == true)) {
       timeButtonUp = currentTime;
       buttonDown = false;
@@ -92,6 +92,7 @@ void loop() {
 
     if ((stanFiltr == 0) && (currentTime - feedStart >= 300000UL)) {
       filtr_on();
+      zarlo = false;
     }
 
     // start testowy
