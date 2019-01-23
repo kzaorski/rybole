@@ -52,7 +52,7 @@ void setup() {
 }
 void loop() {
   currentTime = millis();
-  if (currentTime - rememberedTime >= 100UL) { //delay 1 sec
+  if (currentTime - rememberedTime >= 100UL) { //delay 0.1 sec
     rememberedTime = currentTime;
     // nacisniecie przycisku
     if ((digitalRead(button) == LOW) && (buttonDown == false)) {
