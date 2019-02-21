@@ -30,8 +30,19 @@ unsigned long rememberedTimeFeed = 0;
 unsigned long feedStart = 0;
 unsigned long timeButtonDown = 0;
 unsigned long timeButtonUp = 0;
+// Swit/Zmierzch
+const int ledPin = 11;
+const int pwmIntervals = 180;
+float R;
+int brightness = 0;
+int interval = 0;
+boolean swita = 0;
+boolean zmierzcha = 0;
+unsigned long currentTimeSwit = 0;
+unsigned long rememberedTimeSwit = 0;
 
 void setup() {
+
   Serial.begin(9600);
   while (!Serial);
   Wire.begin();
@@ -42,6 +53,9 @@ void setup() {
   pinMode(plant, OUTPUT);
   pinMode(sunny, OUTPUT);
   pinMode(button, INPUT_PULLUP);
+
+  pinMode(ledPin, OUTPUT);
+
   //---------------------------------------------
   digitalWrite(filtr, HIGH); // 5
   //digitalWrite(fpow, LOW); // 4
@@ -49,11 +63,21 @@ void setup() {
   //digitalWrite(sunny, LOW); // 2
   // 1 - zasilanie stałe
   //---------------------------------------------
+  Serial.print(hour());
+  Serial.print(':');
+  Serial.print(minute());
+  Serial.print(':');
+  Serial.println(second());
+  Serial.println(analogRead(ledPin));
+
+  R = (pwmIntervals * log10(2)) / (log10(255));
+  zgasLED();
 }
 void loop() {
   currentTime = millis();
-  if (currentTime - rememberedTime >= 100UL) { //delay 0.1 sec
+  if (currentTime - rememberedTime >= 100UL) {
     rememberedTime = currentTime;
+    // feed pause
     // nacisniecie przycisku
     if ((digitalRead(button) == LOW) && (buttonDown == false)) {
       timeButtonDown = currentTime;
@@ -99,6 +123,7 @@ void loop() {
 
     // czas(19, 0, 0, sunny_on);
     // czas(13, 30, 0, plant_on);
+    czas(12, 10, 0, zgasLED);
 
     if ((!stanPlant)) {
       czas(12, 00, 0, plant_on);
@@ -122,20 +147,38 @@ void loop() {
       czas(15, 00, 0, sunny_off);
       czas(17, 30, 0, sunny_off);
       czas(19, 30, 0, sunny_off);
+      czas(21, 00, 0, sunny_off);
     }
 
     czas(21, 00, 0, dobranoc);
 
     // filtr powierzchniowy co godzine na 10 min
     ffpow();
+
+    //swity i zmierzchy
+    czas(11, 00, 0, swit);
+    if (swita) {
+      swit();
+    }
+    czas(21, 00, 0, zmierzch);
+    if (zmierzcha) {
+      zmierzch();
+    }
   }
 }
-
+void zgasLED() {
+  analogWrite(ledPin, 0);
+  //Serial.println("analog LED off");
+  // Serial.println(analogRead(ledPin));
+  // digitalWrite(ledPin, 0);
+  // Serial.println("digital LED off");
+  // Serial.println(analogRead(ledPin));
+}
 void ffpow() {
-  if (minute() == 0 && second() == 00) {
+  if (!stanFP && minute() == 0 && second() == 00) {
     fpow_on();
   }
-  if (minute() == 10 && second() == 00) {
+  if (stanFP && minute() == 10 && second() == 00) {
     fpow_off();
   }
 }
@@ -186,4 +229,42 @@ void filtr_on () {
   Serial.println("filtr off");
   stanFiltr = 0;
   digitalWrite(filtr, LOW);
+}
+void swit() {
+  swita = 1;
+  currentTimeSwit = millis();
+  if (currentTimeSwit - rememberedTimeSwit >= 1000UL) {
+    rememberedTimeSwit = currentTimeSwit;
+    if (interval <= pwmIntervals) {
+      interval++;
+      brightness = pow (2, (interval / R)) - 1;
+      if (brightness <= 255) {
+        analogWrite(ledPin, brightness);
+      }
+      //Serial.println(brightness);
+    }
+    else {
+      swita = 0;
+      interval = pwmIntervals;
+    }
+  }
+}
+void zmierzch() {
+  zmierzcha = 1;
+  currentTimeSwit = millis();
+  if (currentTimeSwit - rememberedTimeSwit >= 1000UL) {
+    rememberedTimeSwit = currentTimeSwit;
+    if (interval > 0) {
+      interval--;
+      brightness = (pow (2, (interval / R)) - 1);
+      analogWrite(ledPin, brightness);
+      //Serial.println(brightness);
+    }
+    else {
+      Serial.println("Ciemnosc");
+      analogWrite(ledPin, 0);
+      zmierzcha = 0;
+      interval = 0;
+    }
+  }
 }
