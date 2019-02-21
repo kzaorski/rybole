@@ -168,29 +168,24 @@ void loop() {
 }
 void zgasLED() {
   analogWrite(ledPin, 0);
-  //Serial.println("analog LED off");
-  // Serial.println(analogRead(ledPin));
-  // digitalWrite(ledPin, 0);
-  // Serial.println("digital LED off");
-  // Serial.println(analogRead(ledPin));
 }
 void ffpow() {
-  if (!stanFP && minute() == 0 && second() == 00) {
+  if (!stanFP && minute() == 0) {
     fpow_on();
   }
-  if (stanFP && minute() == 10 && second() == 00) {
+  if (stanFP && minute() == 10) {
     fpow_off();
   }
 }
 void czas (const int h, const int m, const int s, void f() ) {
-  if ((hour() == h) && minute() == m) { //&& second() == s) {
+  if ((hour() == h) && minute() == m) {
     f();
   }
 }
 void dobranoc() {
-  Serial.println("Dobranoc");
   plant_off();
   sunny_off();
+  Serial.println("Dobranoc");
 }
 void sunny_on() {
   Serial.println("sunny on");
