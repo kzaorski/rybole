@@ -32,7 +32,7 @@ unsigned long timeButtonDown = 0;
 unsigned long timeButtonUp = 0;
 // Swit/Zmierzch
 const int ledPin = 11;
-const int pwmIntervals = 180;
+const int pwmIntervals = 1200;
 float R;
 int brightness = 0;
 int interval = 0;
