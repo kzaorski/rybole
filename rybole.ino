@@ -123,22 +123,22 @@ void loop() {
 
     // czas(19, 0, 0, sunny_on);
     // czas(13, 30, 0, plant_on);
-    czas(12, 10, 0, zgasLED);
+    czas(13, 10, 0, zgasLED);
 
     if ((!stanPlant)) {
-      czas(12, 00, 0, plant_on);
+      czas(13, 00, 0, plant_on);
       czas(15, 00, 0, plant_on);
-      czas(16, 30, 0, plant_on);
-      czas(19, 30, 0, plant_on);
+      czas(17, 00, 0, plant_on);
+      //czas(19, 30, 0, plant_on);
     }
     if  (stanPlant) {
-      czas(14, 30, 0, plant_off);
+      czas(14, 00, 0, plant_off);
       czas(16, 00, 0, plant_off);
-      czas(18, 30, 0, plant_off);
-      czas(20, 30, 0, plant_off);
+      czas(19, 00, 0, plant_off);
+      //czas(20, 00, 0, plant_off);
     }
     if (!stanSunny) {
-      czas(13, 30, 0, sunny_on);
+      czas(14, 00, 0, sunny_on);
       czas(16, 00, 0, sunny_on);
       czas(18, 30, 0, sunny_on);
       czas(20, 00, 0, sunny_on);
@@ -146,17 +146,18 @@ void loop() {
     if (stanSunny) {
       czas(15, 00, 0, sunny_off);
       czas(17, 30, 0, sunny_off);
-      czas(19, 30, 0, sunny_off);
+      //czas(19, 30, 0, sunny_off);
       czas(21, 00, 0, sunny_off);
     }
-
+//P 13...14===15...16===17:00...19:00
+//S      14...15===16...17:30===18:30...21
     czas(21, 00, 0, dobranoc);
 
     // filtr powierzchniowy co godzine na 10 min
     ffpow();
 
     //swity i zmierzchy
-    czas(11, 00, 0, swit);
+    czas(12, 00, 0, swit);
     if (swita) {
       swit();
     }
