@@ -129,28 +129,28 @@ void loop() {
       czas(13, 00, 0, plant_on);
       czas(15, 00, 0, plant_on);
       czas(17, 00, 0, plant_on);
-      //czas(19, 30, 0, plant_on);
+      czas(20, 00, 0, plant_on);
     }
     if  (stanPlant) {
       czas(14, 00, 0, plant_off);
       czas(16, 00, 0, plant_off);
-      czas(19, 00, 0, plant_off);
-      //czas(20, 00, 0, plant_off);
+      czas(18, 00, 0, plant_off);
+      czas(21, 00, 0, plant_off);
     }
     if (!stanSunny) {
       czas(14, 00, 0, sunny_on);
       czas(16, 00, 0, sunny_on);
-      czas(18, 30, 0, sunny_on);
-      czas(20, 00, 0, sunny_on);
+      czas(18, 00, 0, sunny_on);
+      //czas(20, 00, 0, sunny_on);
     }
     if (stanSunny) {
       czas(15, 00, 0, sunny_off);
-      czas(17, 30, 0, sunny_off);
+      czas(17, 00, 0, sunny_off);
       //czas(19, 30, 0, sunny_off);
-      czas(21, 00, 0, sunny_off);
+      czas(20, 00, 0, sunny_off);
     }
-//P 13...14===15...16===17:00...19:00
-//S      14...15===16...17:30===18:30...21
+    //P 13...14===15...16===17:00...18:00===20:00...21:00
+    //S      14...15===16...17:30===18:00...20
     czas(21, 00, 0, dobranoc);
 
     // filtr powierzchniowy co godzine na 10 min
@@ -161,11 +161,15 @@ void loop() {
     if (swita) {
       swit();
     }
+    czas(20, 55, 0, inter);
     czas(21, 00, 0, zmierzch);
     if (zmierzcha) {
       zmierzch();
     }
   }
+}
+void inter() {
+  interval = pwmIntervals;
 }
 void zgasLED() {
   analogWrite(ledPin, 0);
