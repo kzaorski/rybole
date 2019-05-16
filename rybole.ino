@@ -123,10 +123,10 @@ void loop() {
 
     // czas(19, 0, 0, sunny_on);
     // czas(13, 30, 0, plant_on);
-    czas(13, 10, 0, zgasLED);
+    czas(14, 10, 0, zgasLED);
 
     if ((!stanPlant)) {
-      czas(13, 00, 0, plant_on);
+      // czas(13, 00, 0, plant_on);
       czas(15, 00, 0, plant_on);
       czas(17, 00, 0, plant_on);
       czas(20, 00, 0, plant_on);
