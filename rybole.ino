@@ -1,13 +1,14 @@
 #include <Time.h>
 #include <TimeLib.h>
 
-#include <DS1302RTC.h>
+//#include <DS1302RTC.h>
+#include <DS3232RTC.h>
 
 #include <Wire.h>
 
-const int kCePin   = 3;  // Chip Enable
-const int kIoPin   = 4;  // Input/Output
-const int kSclkPin = 2;  // Serial Clock
+// const int kCePin   = 3;  // Chip Enable
+// const int kIoPin   = 2;  // Input/Output
+// const int kSclkPin = 4;  // Serial Clock
 
 const int filtr = 7; //5
 const int fpow = 8; //4
@@ -22,7 +23,7 @@ boolean stanSunny = 0;
 boolean zarlo = false;
 boolean buttonDown = false;
 
-DS1302RTC RTC(kCePin, kIoPin, kSclkPin);
+// DS1302RTC RTC(kCePin, kIoPin, kSclkPin);
 
 unsigned long currentTime = 0;
 unsigned long rememberedTime = 0;
@@ -126,7 +127,7 @@ void loop() {
     czas(14, 10, 0, zgasLED);
 
     if ((!stanPlant)) {
-      // czas(13, 00, 0, plant_on);
+      czas(11, 00, 0, plant_on);
       czas(15, 00, 0, plant_on);
       czas(17, 00, 0, plant_on);
       czas(20, 00, 0, plant_on);
@@ -149,7 +150,7 @@ void loop() {
       //czas(19, 30, 0, sunny_off);
       czas(20, 00, 0, sunny_off);
     }
-    //P 13...14===15...16===17:00...18:00===20:00...21:00
+    //P 11...14===15...16===17:00...18:00===20:00...21:00
     //S      14...15===16...17:30===18:00...20
     czas(21, 00, 0, dobranoc);
 
@@ -157,7 +158,7 @@ void loop() {
     ffpow();
 
     //swity i zmierzchy
-    czas(12, 00, 0, swit);
+    czas(10, 00, 0, swit);
     if (swita) {
       swit();
     }
@@ -252,7 +253,7 @@ void swit() {
 void zmierzch() {
   zmierzcha = 1;
   currentTimeSwit = millis();
-  if (currentTimeSwit - rememberedTimeSwit >= 1000UL) {
+  if (currentTimeSwit - rememberedTimeSwit >= 3000UL) {
     rememberedTimeSwit = currentTimeSwit;
     if (interval > 0) {
       interval--;
